@@ -6,6 +6,10 @@ import passport from "passport";
 import { config } from "./config";
 import { errorHandler } from "./middleware/errorHandler";
 import authRoutes from "./routes/auth";
+import casesRoutes from "./routes/cases";
+import optInRoutes from "./routes/optInRequests";
+import documentRoutes from "./routes/documents";
+import dashboardRoutes from "./routes/dashboard";
 
 const app = express();
 
@@ -48,6 +52,10 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/cases", casesRoutes);
+app.use("/api/opt-in-requests", optInRoutes);
+app.use("/api/documents", documentRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Error handler
 app.use(errorHandler);
