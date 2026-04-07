@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  legal
+  sales
+  readonly
+}
+
+enum CaseStatus {
+  new
+  in_review
+  opt_in_requested
+  opt_in_received
+  with_lawyer
+  response_sent
+  awaiting_reply
+  resolved_no_action
+  resolved_settlement
+  escalated_urgent
+  delayed
+  archived
+}
+
+enum CaseType {
+  spam_complaint
+  cease_and_desist
+  gdpr_request
+  data_erasure_request
+  litigation_threat
+  regulatory_inquiry
+  other
+}
+
+enum CaseSource {
+  email_auto
+  email_manual
+  lawyer_letter
+  regulatory_body
+  galaxy_platform
+  other
+}
+
+enum RiskLevel {
+  low
+  medium
+  high
+  critical
+}
+
+enum OptInStatus {
+  pending
+  received
+  verified
+  issue_found
+  linked_to_case
+}
+
+enum DocumentSection {
+  opt_in_proof
+  correspondence
+  internal_notes
+  sent_responses
+  due_diligence
+  other
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  role      UserRole
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assignedCases    LegalCase[]     @relation("AssignedCases")
+  optInRequests    OptInRequest[]  @relation("RequestedBy")
+  uploadedDocs     CaseDocument[]  @relation("UploadedBy")
+  activityLogs     ActivityLog[]   @relation("Actor")
+}
+
+model LegalCase {
+  id                   String     @id @default(uuid())
+  caseId               String     @unique
+  title                String
+  complainantEmail     String
+  complainantName      String?
+  complainantCountry   String?
+  lawyerName           String?
+  lawyerFirm           String?
+  lawyerEmail          String?
+  lawyerPhone          String?
+  dateReceived         DateTime
+  sourceEmailSubject   String?
+  sourceGmailThreadId  String?
+  source               CaseSource @default(other)
+  caseType             CaseType   @default(other)
+  jurisdiction         String?
+  riskLevel            RiskLevel?
+  status               CaseStatus @default(new)
+  responseDeadline     DateTime?
+  internalDeadline     DateTime?
+  followUpDate         DateTime?
+  escalatedToLawyer    Boolean    @default(false)
+  dateEscalated        DateTime?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  assignedTo           User?      @relation("AssignedCases", fields: [assignedToId], references: [id])
+  assignedToId         String?
+
+  linkedOptInRequest   OptInRequest? @relation("LinkedOptIn", fields: [linkedOptInRequestId], references: [id])
+  linkedOptInRequestId String?
+
+  documents            CaseDocument[]  @relation("CaseDocuments")
+  activityLogs         ActivityLog[]   @relation("CaseActivity")
+}
+
+model OptInRequest {
+  id               String       @id @default(uuid())
+  requestId        String       @unique
+  emailAddress     String
+  dateRequested    DateTime     @default(now())
+  reason           String?
+  sixpgSubmitted   Boolean      @default(false)
+  sixpgSubmittedAt DateTime?
+  status           OptInStatus  @default(pending)
+  galaxyData       Json?
+  notes            String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  requestedBy      User         @relation("RequestedBy", fields: [requestedById], references: [id])
+  requestedById    String
+
+  linkedCase       LegalCase?   @relation("LinkedOptIn")
+
+  documents        CaseDocument[] @relation("OptInDocuments")
+  activityLogs     ActivityLog[]  @relation("OptInActivity")
+}
+
+model CaseDocument {
+  id              String          @id @default(uuid())
+  section         DocumentSection
+  fileName        String
+  filePath        String
+  fileSize        Int
+  mimeType        String
+  version         Int             @default(1)
+  uploadedAt      DateTime        @default(now())
+
+  case            LegalCase?      @relation("CaseDocuments", fields: [caseId], references: [id], onDelete: Cascade)
+  caseId          String?
+
+  optInRequest    OptInRequest?   @relation("OptInDocuments", fields: [optInRequestId], references: [id], onDelete: Cascade)
+  optInRequestId  String?
+
+  uploadedBy      User            @relation("UploadedBy", fields: [uploadedById], references: [id])
+  uploadedById    String
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  action    String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  case         LegalCase?    @relation("CaseActivity", fields: [caseId], references: [id], onDelete: Cascade)
+  caseId       String?
+
+  optInRequest OptInRequest? @relation("OptInActivity", fields: [optInRequestId], references: [id], onDelete: Cascade)
+  optInRequestId String?
+
+  actor        User          @relation("Actor", fields: [actorId], references: [id])
+  actorId      String
+}
