@@ -118,7 +118,7 @@ model LegalCase {
   assignedToId         String?
 
   linkedOptInRequest   OptInRequest? @relation("LinkedOptIn", fields: [linkedOptInRequestId], references: [id])
-  linkedOptInRequestId String?
+  linkedOptInRequestId String?       @unique
 
   documents            CaseDocument[]  @relation("CaseDocuments")
   activityLogs         ActivityLog[]   @relation("CaseActivity")
