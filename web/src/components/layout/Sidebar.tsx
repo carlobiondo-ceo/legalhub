@@ -41,10 +41,10 @@ export default function Sidebar() {
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium cursor-pointer transition-colors duration-200",
+                "flex items-center gap-3 px-3 py-2.5 text-sm font-medium cursor-pointer transition-colors duration-200 border-l-3",
                 active
-                  ? "bg-sidebar-hover text-sidebar-active"
-                  : "text-sidebar-text hover:bg-sidebar-hover"
+                  ? "border-sidebar-accent bg-sidebar-hover text-sidebar-active"
+                  : "border-transparent text-sidebar-text hover:bg-sidebar-hover hover:text-sidebar-active"
               )}
             >
               <Icon className="h-5 w-5 shrink-0" />

@@ -7,24 +7,25 @@ const config: Config = {
     extend: {
       colors: {
         sidebar: {
-          bg: "#1E1E2E",
-          text: "#E2E8F0",
+          bg: "#2C3345",
+          text: "#8899AA",
           active: "#FFFFFF",
-          hover: "#2D2D42",
+          hover: "#3A4558",
+          accent: "#36B37E",
         },
         page: {
-          bg: "#F4F6F8",
+          bg: "#F0F2F5",
         },
         primary: {
-          DEFAULT: "#22C55E",
+          DEFAULT: "#36B37E",
           foreground: "#FFFFFF",
         },
-        danger: "#EF4444",
-        warning: "#F59E0B",
-        info: "#3B82F6",
+        danger: "#E5493A",
+        warning: "#FFAB00",
+        info: "#0065FF",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ['"Open Sans"', "sans-serif"],
       },
     },
   },
