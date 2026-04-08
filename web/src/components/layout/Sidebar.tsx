@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Briefcase, ShieldCheck, Settings, Menu, X } from "lucide-react";
+import { LayoutDashboard, Briefcase, ShieldCheck, FileSearch, Settings, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   { label: "Legal Cases", href: "/cases", icon: Briefcase },
   { label: "Opt-In Requests", href: "/opt-in", icon: ShieldCheck },
+  { label: "Due Diligence", href: "/due-diligence", icon: FileSearch },
 ];
 
 export default function Sidebar() {
