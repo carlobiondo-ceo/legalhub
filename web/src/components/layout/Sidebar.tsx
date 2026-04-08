@@ -30,7 +30,7 @@ export default function Sidebar() {
       >
         <Menu size={20} style={{ color: "rgba(255,255,255,0.45)" }} />
         <div>
-          <div className="text-[13px] font-bold leading-tight text-white">AudienceServ</div>
+          <div className="text-[13px] font-bold leading-tight text-white">Audience Serv</div>
           <div className="text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>
             Legal Hub
           </div>

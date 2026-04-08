@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AudienceServ Legal Hub",
+  title: "Audience Serv Legal Hub",
   description: "Internal legal case management platform",
 };
 
