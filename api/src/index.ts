@@ -13,6 +13,13 @@ import dashboardRoutes from "./routes/dashboard";
 
 const app = express();
 
+const isProduction = process.env.NODE_ENV === "production";
+
+// Trust first proxy (nginx) when running behind a reverse proxy in production
+if (isProduction) {
+  app.set("trust proxy", 1);
+}
+
 // CORS
 app.use(
   cors({
@@ -37,7 +44,7 @@ app.use(
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true,
-      secure: false, // true in production with HTTPS
+      secure: isProduction, // HTTPS-only cookies in production
       sameSite: "lax",
     },
   })

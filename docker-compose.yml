@@ -19,9 +19,11 @@ services:
     ports:
       - "3001:3001"
     environment:
+      NODE_ENV: ${NODE_ENV:-development}
       DATABASE_URL: ${DATABASE_URL}
       API_PORT: ${API_PORT}
       SESSION_SECRET: ${SESSION_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL}
@@ -29,6 +31,8 @@ services:
       SEED_ADMIN_NAME: ${SEED_ADMIN_NAME}
       SEED_LEGAL_EMAIL: ${SEED_LEGAL_EMAIL}
       SEED_LEGAL_NAME: ${SEED_LEGAL_NAME}
+      SEED_CTO_EMAIL: ${SEED_CTO_EMAIL}
+      SEED_CTO_NAME: ${SEED_CTO_NAME}
     volumes:
       - ./api/src:/app/src
       - ./api/prisma:/app/prisma
@@ -44,7 +48,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:3001/api
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001/api}
     volumes:
       - ./web/src:/app/src
       - ./web/public:/app/public
