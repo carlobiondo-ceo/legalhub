@@ -40,8 +40,15 @@ export default function DashboardPage() {
   const loading = !stats || !deadlines || !activity;
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+    <div>
+      <div className="mb-5">
+        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: "#1a202c" }}>
+          Dashboard
+        </h1>
+        <p style={{ margin: "4px 0 0", fontSize: 13, color: "#a0aec0" }}>
+          Overview of all legal matters and case activity
+        </p>
+      </div>
 
       {/* KPI Cards */}
       {loading ? (

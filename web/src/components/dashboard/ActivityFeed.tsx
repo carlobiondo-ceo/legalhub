@@ -58,8 +58,16 @@ function describeAction(log: ActivityLog): string {
 
 export default function ActivityFeed({ activity }: ActivityFeedProps) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
+    <div
+      style={{
+        background: "#ffffff",
+        borderRadius: 10,
+        border: "1px solid #e2e8f0",
+        padding: 20,
+        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+      }}
+    >
+      <h2 style={{ fontWeight: 600, color: "#1a202c", fontSize: 14, marginBottom: 16 }}>
         Recent Activity
       </h2>
 

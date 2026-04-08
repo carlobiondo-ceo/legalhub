@@ -8,9 +8,9 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
   return (
     <AuthGuard>
       {(user) => (
-        <div className="min-h-screen">
+        <div className="min-h-screen" style={{ background: "#eef2f7" }}>
           <Sidebar />
-          <div className="md:pl-60">
+          <div className="md:pl-56">
             <Topbar user={user} />
             <main className="p-6">{children}</main>
           </div>

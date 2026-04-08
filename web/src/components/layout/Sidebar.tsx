@@ -3,8 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Briefcase, ShieldCheck, FileSearch, Settings, Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { LayoutDashboard, Briefcase, ShieldCheck, FileSearch, Settings, Menu, X, LogOut } from "lucide-react";
 
 const navItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -23,15 +22,23 @@ export default function Sidebar() {
   };
 
   const nav = (
-    <div className="flex flex-col h-full">
-      {/* Logo */}
-      <div className="px-6 py-5">
-        <h1 className="text-white text-lg font-semibold">AudienceServ</h1>
-        <p className="text-sidebar-text text-sm">Legal Hub</p>
+    <div className="flex flex-col h-full" style={{ background: "#1a2635" }}>
+      {/* Logo header */}
+      <div
+        className="flex items-center gap-2.5 px-4 py-4"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+      >
+        <Menu size={20} style={{ color: "rgba(255,255,255,0.45)" }} />
+        <div>
+          <div className="text-[13px] font-bold leading-tight text-white">AudienceServ</div>
+          <div className="text-[10px] mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>
+            Legal Hub
+          </div>
+        </div>
       </div>
 
-      {/* Nav items */}
-      <nav className="flex-1 px-3 space-y-1">
+      {/* Nav */}
+      <nav className="flex-1 px-2 py-2.5 overflow-y-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.href);
@@ -40,34 +47,70 @@ export default function Sidebar() {
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 text-sm font-medium cursor-pointer transition-colors duration-200 border-l-3",
-                active
-                  ? "border-sidebar-accent bg-sidebar-hover text-sidebar-active"
-                  : "border-transparent text-sidebar-text hover:bg-sidebar-hover hover:text-sidebar-active"
-              )}
+              className="flex items-center gap-2.5 px-2.5 py-2 rounded-md cursor-pointer mb-0.5 transition-colors duration-150"
+              style={{
+                background: active ? "rgba(61,180,140,0.16)" : "transparent",
+                borderLeft: active ? "3px solid #3db48c" : "3px solid transparent",
+                paddingLeft: active ? "7px" : "10px",
+              }}
+              onMouseEnter={(e) => {
+                if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+              }}
+              onMouseLeave={(e) => {
+                if (!active) e.currentTarget.style.background = "transparent";
+              }}
             >
-              <Icon className="h-5 w-5 shrink-0" />
-              {item.label}
+              <Icon
+                size={16}
+                style={{ color: active ? "#3db48c" : "rgba(255,255,255,0.5)", flexShrink: 0 }}
+              />
+              <span
+                className="text-[13px] font-medium"
+                style={{ color: active ? "#fff" : "rgba(255,255,255,0.6)" }}
+              >
+                {item.label}
+              </span>
             </Link>
           );
         })}
       </nav>
 
-      {/* Settings at bottom */}
-      <div className="px-3 pb-4">
+      {/* Settings + logout */}
+      <div className="px-2 py-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link
           href="/settings"
           onClick={() => setMobileOpen(false)}
-          className={cn(
-            "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium cursor-pointer transition-colors duration-200",
-            isActive("/settings")
-              ? "bg-sidebar-hover text-sidebar-active"
-              : "text-sidebar-text hover:bg-sidebar-hover"
-          )}
+          className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md cursor-pointer mb-0.5 transition-colors duration-150"
+          style={{
+            background: isActive("/settings") ? "rgba(61,180,140,0.16)" : "transparent",
+            borderLeft: isActive("/settings")
+              ? "3px solid #3db48c"
+              : "3px solid transparent",
+            paddingLeft: isActive("/settings") ? "7px" : "10px",
+          }}
+          onMouseEnter={(e) => {
+            if (!isActive("/settings"))
+              e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+          }}
+          onMouseLeave={(e) => {
+            if (!isActive("/settings"))
+              e.currentTarget.style.background = "transparent";
+          }}
         >
-          <Settings className="h-5 w-5 shrink-0" />
-          Settings
+          <Settings
+            size={16}
+            style={{
+              color: isActive("/settings") ? "#3db48c" : "rgba(255,255,255,0.5)",
+            }}
+          />
+          <span
+            className="text-[13px] font-medium"
+            style={{
+              color: isActive("/settings") ? "#fff" : "rgba(255,255,255,0.6)",
+            }}
+          >
+            Settings
+          </span>
         </Link>
       </div>
     </div>
@@ -78,7 +121,8 @@ export default function Sidebar() {
       {/* Mobile hamburger */}
       <button
         type="button"
-        className="fixed top-3 left-3 z-50 md:hidden p-2 rounded-md bg-sidebar-bg text-white cursor-pointer"
+        className="fixed top-3 left-3 z-50 md:hidden p-2 rounded-md cursor-pointer"
+        style={{ background: "#1a2635", color: "#fff" }}
         onClick={() => setMobileOpen(true)}
         aria-label="Open navigation"
       >
@@ -95,14 +139,14 @@ export default function Sidebar() {
 
       {/* Mobile sidebar */}
       <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 w-60 bg-sidebar-bg transform transition-transform duration-300 md:hidden",
+        className={`fixed inset-y-0 left-0 z-50 w-56 transform transition-transform duration-300 md:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
-        )}
+        }`}
       >
         <button
           type="button"
-          className="absolute top-3 right-3 p-1 text-sidebar-text hover:text-white cursor-pointer"
+          className="absolute top-3 right-3 p-1 cursor-pointer z-10"
+          style={{ color: "rgba(255,255,255,0.6)" }}
           onClick={() => setMobileOpen(false)}
           aria-label="Close navigation"
         >
@@ -112,7 +156,7 @@ export default function Sidebar() {
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-60 md:flex-col bg-sidebar-bg">
+      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-56 md:flex-col">
         {nav}
       </aside>
     </>
