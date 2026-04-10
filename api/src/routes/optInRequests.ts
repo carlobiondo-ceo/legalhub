@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 // List opt-in requests with pagination, search, and filters
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", requireAuth, async (req: Request, res: Response) => {
   try {
     const { page, limit, search, status, dateFrom, dateTo } = req.query;
 
@@ -38,7 +38,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // Get single opt-in request
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", requireAuth, async (req: Request, res: Response) => {
   try {
     const optIn = await getOptInRequest(req.params.id);
     if (!optIn) {

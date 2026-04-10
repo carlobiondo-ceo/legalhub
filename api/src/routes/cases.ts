@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 // List cases with pagination, search, and filters
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", requireAuth, async (req: Request, res: Response) => {
   try {
     const {
       page,
@@ -54,7 +54,7 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // Get single case
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", requireAuth, async (req: Request, res: Response) => {
   try {
     const legalCase = await getCase(req.params.id);
     if (!legalCase) {
