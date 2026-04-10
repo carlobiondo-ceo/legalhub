@@ -68,7 +68,9 @@ export default function CaseForm({ initialData, onSubmit, loading }: CaseFormPro
   const [lawyerPhone, setLawyerPhone] = useState(initialData?.lawyerPhone ?? "");
 
   const [source, setSource] = useState<CaseSource>(initialData?.source ?? "email_manual");
+  const [sourceOther, setSourceOther] = useState(initialData?.sourceOther ?? "");
   const [caseType, setCaseType] = useState<CaseType>(initialData?.caseType ?? "spam_complaint");
+  const [caseTypeOther, setCaseTypeOther] = useState(initialData?.caseTypeOther ?? "");
   const [jurisdiction, setJurisdiction] = useState(initialData?.jurisdiction ?? "");
   const [riskLevel, setRiskLevel] = useState<RiskLevel | "">(initialData?.riskLevel ?? "");
 
@@ -102,7 +104,9 @@ export default function CaseForm({ initialData, onSubmit, loading }: CaseFormPro
       lawyerEmail: lawyerEmail || null,
       lawyerPhone: lawyerPhone || null,
       source,
+      sourceOther: source === "other" ? sourceOther || null : null,
       caseType,
+      caseTypeOther: caseType === "other" ? caseTypeOther || null : null,
       jurisdiction: jurisdiction || null,
       riskLevel: riskLevel || null,
       dateReceived: dateReceived || todayStr(),
@@ -210,6 +214,15 @@ export default function CaseForm({ initialData, onSubmit, loading }: CaseFormPro
                 <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
+            {source === "other" && (
+              <input
+                type="text"
+                value={sourceOther}
+                onChange={(e) => setSourceOther(e.target.value)}
+                className={inputClass + " mt-2"}
+                placeholder="Specify the source..."
+              />
+            )}
           </div>
           <div>
             <label htmlFor="caseType" className={labelClass}>Case Type</label>
@@ -218,6 +231,15 @@ export default function CaseForm({ initialData, onSubmit, loading }: CaseFormPro
                 <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
+            {caseType === "other" && (
+              <input
+                type="text"
+                value={caseTypeOther}
+                onChange={(e) => setCaseTypeOther(e.target.value)}
+                className={inputClass + " mt-2"}
+                placeholder="Specify the case type..."
+              />
+            )}
           </div>
           <div>
             <label htmlFor="jurisdiction" className={labelClass}>Jurisdiction</label>

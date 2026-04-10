@@ -14,6 +14,12 @@ interface OptInFormProps {
 
 export default function OptInForm({ onSubmit, loading }: OptInFormProps) {
   const [emailAddress, setEmailAddress] = useState("");
+  const [complainantName, setComplainantName] = useState("");
+  const [complainantCountry, setComplainantCountry] = useState("");
+  const [gender, setGender] = useState("");
+  const [soiTimestamp, setSoiTimestamp] = useState("");
+  const [doiTimestamp, setDoiTimestamp] = useState("");
+  const [responseDeadline, setResponseDeadline] = useState("");
   const [reason, setReason] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -22,6 +28,12 @@ export default function OptInForm({ onSubmit, loading }: OptInFormProps) {
 
     const data: Record<string, unknown> = {
       emailAddress,
+      complainantName: complainantName || null,
+      complainantCountry: complainantCountry || null,
+      gender: gender || null,
+      soiTimestamp: soiTimestamp || null,
+      doiTimestamp: doiTimestamp || null,
+      responseDeadline: responseDeadline || null,
       reason: reason || null,
       notes: notes || null,
     };
@@ -30,20 +42,111 @@ export default function OptInForm({ onSubmit, loading }: OptInFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
-      <div>
-        <label htmlFor="emailAddress" className={labelClass}>
-          Email Address <span className="text-red-500">*</span>
-        </label>
-        <input
-          id="emailAddress"
-          type="email"
-          required
-          value={emailAddress}
-          onChange={(e) => setEmailAddress(e.target.value)}
-          className={inputClass}
-          placeholder="complainant@example.com"
-        />
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md:col-span-2">
+          <label htmlFor="emailAddress" className={labelClass}>
+            Email Address <span className="text-red-500">*</span>
+          </label>
+          <input
+            id="emailAddress"
+            type="email"
+            required
+            value={emailAddress}
+            onChange={(e) => setEmailAddress(e.target.value)}
+            className={inputClass}
+            placeholder="complainant@example.com"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="complainantCountry" className={labelClass}>
+            Country <span className="text-red-500">*</span>
+          </label>
+          <input
+            id="complainantCountry"
+            type="text"
+            required
+            value={complainantCountry}
+            onChange={(e) => setComplainantCountry(e.target.value)}
+            className={inputClass}
+            placeholder="e.g. DE, AT, CH"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="complainantName" className={labelClass}>
+            Complainant Name
+          </label>
+          <input
+            id="complainantName"
+            type="text"
+            value={complainantName}
+            onChange={(e) => setComplainantName(e.target.value)}
+            className={inputClass}
+            placeholder="Full name (if known)"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="gender" className={labelClass}>
+            Gender
+          </label>
+          <select
+            id="gender"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            className={inputClass}
+          >
+            <option value="">—</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="responseDeadline" className={labelClass}>
+            Response Deadline
+          </label>
+          <input
+            id="responseDeadline"
+            type="date"
+            value={responseDeadline}
+            onChange={(e) => setResponseDeadline(e.target.value)}
+            className={inputClass}
+          />
+          <p className="text-xs text-gray-500 mt-1">Some complainers want an answer earlier than 30 days.</p>
+        </div>
+
+        <div>
+          <label htmlFor="soiTimestamp" className={labelClass}>
+            SOI Timestamp
+          </label>
+          <input
+            id="soiTimestamp"
+            type="datetime-local"
+            value={soiTimestamp}
+            onChange={(e) => setSoiTimestamp(e.target.value)}
+            className={inputClass}
+          />
+          <p className="text-xs text-gray-500 mt-1">Single opt-in time (subscription form submitted).</p>
+        </div>
+
+        <div>
+          <label htmlFor="doiTimestamp" className={labelClass}>
+            DOI Timestamp
+          </label>
+          <input
+            id="doiTimestamp"
+            type="datetime-local"
+            value={doiTimestamp}
+            onChange={(e) => setDoiTimestamp(e.target.value)}
+            className={inputClass}
+          />
+          <p className="text-xs text-gray-500 mt-1">Double opt-in time (confirmation link clicked).</p>
+        </div>
       </div>
 
       <div>

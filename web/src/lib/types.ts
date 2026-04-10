@@ -22,7 +22,14 @@ export type CaseSource =
 
 export type RiskLevel = "low" | "medium" | "high" | "critical";
 
-export type OptInStatus = "pending" | "received" | "verified" | "issue_found" | "linked_to_case";
+export type OptInStatus =
+  | "pending"
+  | "received"
+  | "verified"
+  | "issue_found"
+  | "linked_to_case"
+  | "email_not_found"
+  | "no_action_needed";
 
 export type DocumentSection =
   | "opt_in_proof" | "correspondence" | "internal_notes"
@@ -43,7 +50,9 @@ export interface LegalCase {
   sourceEmailSubject: string | null;
   sourceGmailThreadId: string | null;
   source: CaseSource;
+  sourceOther: string | null;
   caseType: CaseType;
+  caseTypeOther: string | null;
   jurisdiction: string | null;
   riskLevel: RiskLevel | null;
   status: CaseStatus;
@@ -55,6 +64,12 @@ export interface LegalCase {
   escalatedToLawyer: boolean;
   dateEscalated: string | null;
   linkedOptInRequestId: string | null;
+  linkedOptInRequest?: {
+    id: string;
+    requestId: string;
+    emailAddress: string;
+    status: OptInStatus;
+  } | null;
   documents?: CaseDocument[];
   activityLogs?: ActivityLog[];
   createdAt: string;
@@ -65,6 +80,12 @@ export interface OptInRequest {
   id: string;
   requestId: string;
   emailAddress: string;
+  complainantName: string | null;
+  complainantCountry: string | null;
+  gender: string | null;
+  soiTimestamp: string | null;
+  doiTimestamp: string | null;
+  responseDeadline: string | null;
   requestedById: string;
   requestedBy: Pick<User, "id" | "name" | "avatarUrl">;
   dateRequested: string;

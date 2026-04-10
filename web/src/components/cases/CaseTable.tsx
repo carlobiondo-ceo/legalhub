@@ -55,7 +55,7 @@ export default function CaseTable({ cases }: CaseTableProps) {
             >
               <td className="px-4 py-3">
                 <Link
-                  href={`/cases/${c.id}`}
+                  href={`/cases/${c.caseId}`}
                   className="text-blue-600 hover:underline cursor-pointer font-medium"
                 >
                   {c.caseId}

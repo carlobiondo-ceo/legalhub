@@ -7,25 +7,27 @@ const prisma = new PrismaClient();
 interface CreateCaseInput {
   title: string;
   complainantEmail: string;
-  complainantName?: string;
-  complainantCountry?: string;
-  lawyerName?: string;
-  lawyerFirm?: string;
-  lawyerEmail?: string;
-  lawyerPhone?: string;
+  complainantName?: string | null;
+  complainantCountry?: string | null;
+  lawyerName?: string | null;
+  lawyerFirm?: string | null;
+  lawyerEmail?: string | null;
+  lawyerPhone?: string | null;
   dateReceived: string;
-  sourceEmailSubject?: string;
-  sourceGmailThreadId?: string;
+  sourceEmailSubject?: string | null;
+  sourceGmailThreadId?: string | null;
   source?: string;
+  sourceOther?: string | null;
   caseType?: string;
-  jurisdiction?: string;
-  riskLevel?: string;
+  caseTypeOther?: string | null;
+  jurisdiction?: string | null;
+  riskLevel?: string | null;
   status?: string;
-  responseDeadline?: string;
-  internalDeadline?: string;
-  followUpDate?: string;
-  assignedToId?: string;
-  linkedOptInRequestId?: string;
+  responseDeadline?: string | null;
+  internalDeadline?: string | null;
+  followUpDate?: string | null;
+  assignedToId?: string | null;
+  linkedOptInRequestId?: string | null;
 }
 
 interface ListCasesParams {
@@ -59,7 +61,9 @@ export async function createCase(input: CreateCaseInput, actorId: string) {
       sourceEmailSubject: input.sourceEmailSubject,
       sourceGmailThreadId: input.sourceGmailThreadId,
       source: input.source as any,
+      sourceOther: input.sourceOther ?? null,
       caseType: input.caseType as any,
+      caseTypeOther: input.caseTypeOther ?? null,
       jurisdiction: input.jurisdiction,
       riskLevel: input.riskLevel as any,
       status: (input.status as any) || "new",
@@ -81,9 +85,11 @@ export async function createCase(input: CreateCaseInput, actorId: string) {
   return legalCase;
 }
 
-export async function getCase(id: string) {
+export async function getCase(idOrCaseId: string) {
+  // Accept either the UUID id or the human-readable caseId (LEGAL-YYYY-NNNN)
+  const isHumanId = /^LEGAL-\d{4}-\d+$/i.test(idOrCaseId);
   return prisma.legalCase.findUnique({
-    where: { id },
+    where: isHumanId ? { caseId: idOrCaseId.toUpperCase() } : { id: idOrCaseId },
     include: {
       assignedTo: {
         select: { id: true, name: true, email: true, avatarUrl: true },

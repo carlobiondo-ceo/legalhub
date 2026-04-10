@@ -77,10 +77,10 @@ export default function ActivityFeed({ activity }: ActivityFeedProps) {
         <div className="max-h-80 overflow-y-auto space-y-3">
           {activity.map((log) => {
             const Icon = getActionIcon(log.action);
-            const linkHref = log.caseId
-              ? `/cases/${log.caseId}`
-              : log.optInRequestId
-              ? `/opt-in/${log.optInRequestId}`
+            const linkHref = log.case?.caseId
+              ? `/cases/${log.case.caseId}`
+              : log.optInRequest?.requestId
+              ? `/opt-in/${log.optInRequest.requestId}`
               : null;
             const linkLabel = log.case
               ? log.case.caseId

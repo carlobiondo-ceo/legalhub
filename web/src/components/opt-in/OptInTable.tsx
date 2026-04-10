@@ -50,7 +50,7 @@ export default function OptInTable({ requests }: OptInTableProps) {
             >
               <td className="px-4 py-3">
                 <Link
-                  href={`/opt-in/${r.id}`}
+                  href={`/opt-in/${r.requestId}`}
                   className="text-blue-600 hover:underline cursor-pointer font-medium"
                 >
                   {r.requestId}
@@ -73,7 +73,7 @@ export default function OptInTable({ requests }: OptInTableProps) {
               <td className="px-4 py-3">
                 {r.linkedCase ? (
                   <Link
-                    href={`/cases/${r.linkedCase.id}`}
+                    href={`/cases/${r.linkedCase.caseId}`}
                     className="text-blue-600 hover:underline cursor-pointer text-sm"
                   >
                     {r.linkedCase.caseId}

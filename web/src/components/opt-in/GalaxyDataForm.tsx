@@ -26,7 +26,7 @@ export default function GalaxyDataForm({ data, onChange }: GalaxyDataFormProps) 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="galaxy-sendDate" className={labelClass}>
-            Send Date
+            Campaign Send Date
           </label>
           <input
             id="galaxy-sendDate"
@@ -35,6 +35,7 @@ export default function GalaxyDataForm({ data, onChange }: GalaxyDataFormProps) 
             onChange={(e) => update("sendDate", e.target.value)}
             className={inputClass + " cursor-pointer"}
           />
+          <p className="text-xs text-gray-500 mt-1">Date the mailing that triggered the complaint was sent.</p>
         </div>
 
         <div>
@@ -69,7 +70,7 @@ export default function GalaxyDataForm({ data, onChange }: GalaxyDataFormProps) 
 
         <div>
           <label htmlFor="galaxy-confirmationEmailSent" className={labelClass}>
-            Confirmation Email Sent
+            DOI Confirmation Email Sent?
           </label>
           <select
             id="galaxy-confirmationEmailSent"
@@ -81,6 +82,7 @@ export default function GalaxyDataForm({ data, onChange }: GalaxyDataFormProps) 
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
+          <p className="text-xs text-gray-500 mt-1">Was a double opt-in confirmation email sent to the subscriber at signup?</p>
         </div>
 
         <div className="md:col-span-2">

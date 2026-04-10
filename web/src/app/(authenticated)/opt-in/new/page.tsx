@@ -17,7 +17,7 @@ export default function NewOptInPage() {
     setError(null);
     try {
       const created = await optInRequests.create(data);
-      router.push(`/opt-in/${created.id}`);
+      router.push(`/opt-in/${created.requestId}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create request");
       setLoading(false);

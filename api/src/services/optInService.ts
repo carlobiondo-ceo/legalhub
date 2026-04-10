@@ -6,8 +6,14 @@ const prisma = new PrismaClient();
 
 interface CreateOptInInput {
   emailAddress: string;
-  reason?: string;
-  notes?: string;
+  complainantName?: string | null;
+  complainantCountry?: string | null;
+  gender?: string | null;
+  soiTimestamp?: string | null;
+  doiTimestamp?: string | null;
+  responseDeadline?: string | null;
+  reason?: string | null;
+  notes?: string | null;
   galaxyData?: Record<string, unknown>;
   linkedCaseId?: string;
 }
@@ -31,8 +37,14 @@ export async function createOptInRequest(
     data: {
       requestId,
       emailAddress: input.emailAddress,
-      reason: input.reason,
-      notes: input.notes,
+      complainantName: input.complainantName ?? null,
+      complainantCountry: input.complainantCountry ?? null,
+      gender: input.gender ?? null,
+      soiTimestamp: input.soiTimestamp ? new Date(input.soiTimestamp) : null,
+      doiTimestamp: input.doiTimestamp ? new Date(input.doiTimestamp) : null,
+      responseDeadline: input.responseDeadline ? new Date(input.responseDeadline) : null,
+      reason: input.reason ?? null,
+      notes: input.notes ?? null,
       galaxyData: input.galaxyData || undefined,
       requestedById: actorId,
     },
@@ -48,9 +60,11 @@ export async function createOptInRequest(
   return optIn;
 }
 
-export async function getOptInRequest(id: string) {
+export async function getOptInRequest(idOrRequestId: string) {
+  // Accept either the UUID id or the human-readable requestId (OPT-YYYY-NNNN)
+  const isHumanId = /^OPT-\d{4}-\d+$/i.test(idOrRequestId);
   return prisma.optInRequest.findUnique({
-    where: { id },
+    where: isHumanId ? { requestId: idOrRequestId.toUpperCase() } : { id: idOrRequestId },
     include: {
       requestedBy: {
         select: { id: true, name: true, email: true, avatarUrl: true },
@@ -145,11 +159,17 @@ export async function updateOptInRequest(
   }
 
   // Convert date strings
-  if (data.dateRequested) {
-    data.dateRequested = new Date(data.dateRequested);
-  }
-  if (data.sixpgSubmittedAt && typeof data.sixpgSubmittedAt === "string") {
-    data.sixpgSubmittedAt = new Date(data.sixpgSubmittedAt);
+  const dateFields = [
+    "dateRequested",
+    "sixpgSubmittedAt",
+    "soiTimestamp",
+    "doiTimestamp",
+    "responseDeadline",
+  ];
+  for (const field of dateFields) {
+    if (data[field] && typeof data[field] === "string") {
+      data[field] = new Date(data[field]);
+    }
   }
 
   const updated = await prisma.optInRequest.update({

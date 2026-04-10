@@ -17,7 +17,7 @@ export default function NewCasePage() {
     setError(null);
     try {
       const newCase = await cases.create(data);
-      router.push(`/cases/${newCase.id}`);
+      router.push(`/cases/${newCase.caseId}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create case");
       setLoading(false);

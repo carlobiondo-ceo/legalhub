@@ -61,6 +61,8 @@ enum OptInStatus {
   verified
   issue_found
   linked_to_case
+  email_not_found
+  no_action_needed
 }
 
 enum DocumentSection {
@@ -102,7 +104,9 @@ model LegalCase {
   sourceEmailSubject   String?
   sourceGmailThreadId  String?
   source               CaseSource @default(other)
+  sourceOther          String?
   caseType             CaseType   @default(other)
+  caseTypeOther        String?
   jurisdiction         String?
   riskLevel            RiskLevel?
   status               CaseStatus @default(new)
@@ -128,6 +132,12 @@ model OptInRequest {
   id               String       @id @default(uuid())
   requestId        String       @unique
   emailAddress     String
+  complainantName  String?
+  complainantCountry String?
+  gender           String?
+  soiTimestamp     DateTime?
+  doiTimestamp     DateTime?
+  responseDeadline DateTime?
   dateRequested    DateTime     @default(now())
   reason           String?
   sixpgSubmitted   Boolean      @default(false)

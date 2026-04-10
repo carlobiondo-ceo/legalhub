@@ -13,6 +13,8 @@ const STATUS_OPTIONS: { value: OptInStatus; label: string }[] = [
   { value: "verified", label: "Verified" },
   { value: "issue_found", label: "Issue Found" },
   { value: "linked_to_case", label: "Linked to Case" },
+  { value: "email_not_found", label: "Email Not Found" },
+  { value: "no_action_needed", label: "No Action Needed" },
 ];
 
 export default function OptInListPage() {

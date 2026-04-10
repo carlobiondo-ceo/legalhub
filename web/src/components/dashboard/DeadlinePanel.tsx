@@ -49,7 +49,7 @@ export default function DeadlinePanel({ deadlines }: DeadlinePanelProps) {
           {deadlines.map((item) => (
             <Link
               key={item.id}
-              href={`/cases/${item.id}`}
+              href={`/cases/${item.caseId}`}
               className={cn(
                 "block rounded-md border p-3 cursor-pointer hover:opacity-80 transition-opacity",
                 urgencyStyles[item.urgency]

@@ -455,6 +455,20 @@ export default function CaseDetailPage() {
               onSave={(v) => updateField("escalatedToLawyer", v === "true")}
             />
           </div>
+
+          {c.linkedOptInRequest && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <p className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-2">Linked Opt-In Request</p>
+              <Link
+                href={`/opt-in/${c.linkedOptInRequest.requestId}`}
+                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline cursor-pointer"
+              >
+                <span className="font-mono font-medium">{c.linkedOptInRequest.requestId}</span>
+                <span className="text-gray-500">—</span>
+                <span>{c.linkedOptInRequest.emailAddress}</span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 

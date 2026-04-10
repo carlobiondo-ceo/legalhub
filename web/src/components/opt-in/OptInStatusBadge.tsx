@@ -7,6 +7,8 @@ const statusConfig: Record<OptInStatus, { label: string; className: string }> = 
   verified: { label: "Verified", className: "bg-green-100 text-green-700" },
   issue_found: { label: "Issue Found", className: "bg-red-100 text-red-700" },
   linked_to_case: { label: "Linked to Case", className: "bg-purple-100 text-purple-700" },
+  email_not_found: { label: "Email Not Found", className: "bg-gray-100 text-gray-600" },
+  no_action_needed: { label: "No Action Needed", className: "bg-gray-100 text-gray-600" },
 };
 
 interface OptInStatusBadgeProps {

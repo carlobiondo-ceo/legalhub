@@ -30,6 +30,8 @@ const ALL_STATUSES: { value: OptInStatus; label: string }[] = [
   { value: "verified", label: "Verified" },
   { value: "issue_found", label: "Issue Found" },
   { value: "linked_to_case", label: "Linked to Case" },
+  { value: "email_not_found", label: "Email Not Found" },
+  { value: "no_action_needed", label: "No Action Needed" },
 ];
 
 // --- Activity Icon ---
@@ -57,7 +59,7 @@ function InlineField({
 }: {
   label: string;
   value: string;
-  type?: "text" | "email" | "date" | "select" | "checkbox";
+  type?: "text" | "email" | "date" | "datetime-local" | "select" | "checkbox";
   options?: { value: string; label: string }[];
   onSave: (val: string) => void;
   badge?: React.ReactNode;
@@ -380,6 +382,21 @@ export default function OptInDetailPage() {
               onSave={(v) => updateField("emailAddress", v)}
             />
             <InlineField
+              label="Complainant Name"
+              value={r.complainantName ?? ""}
+              onSave={(v) => updateField("complainantName", v || null)}
+            />
+            <InlineField
+              label="Country"
+              value={r.complainantCountry ?? ""}
+              onSave={(v) => updateField("complainantCountry", v || null)}
+            />
+            <InlineField
+              label="Gender"
+              value={r.gender ?? ""}
+              onSave={(v) => updateField("gender", v || null)}
+            />
+            <InlineField
               label="Requested By"
               value={r.requestedBy?.name ?? ""}
               onSave={() => {}}
@@ -394,9 +411,39 @@ export default function OptInDetailPage() {
               type="date"
               onSave={(v) => updateField("dateRequested", v)}
             />
+            <InlineField
+              label="Response Deadline"
+              value={
+                r.responseDeadline
+                  ? new Date(r.responseDeadline).toISOString().split("T")[0]
+                  : ""
+              }
+              type="date"
+              onSave={(v) => updateField("responseDeadline", v || null)}
+            />
           </div>
 
           <div className="divide-y divide-gray-100">
+            <InlineField
+              label="SOI Timestamp"
+              value={
+                r.soiTimestamp
+                  ? new Date(r.soiTimestamp).toISOString().slice(0, 16)
+                  : ""
+              }
+              type="datetime-local"
+              onSave={(v) => updateField("soiTimestamp", v || null)}
+            />
+            <InlineField
+              label="DOI Timestamp"
+              value={
+                r.doiTimestamp
+                  ? new Date(r.doiTimestamp).toISOString().slice(0, 16)
+                  : ""
+              }
+              type="datetime-local"
+              onSave={(v) => updateField("doiTimestamp", v || null)}
+            />
             <InlineField
               label="Reason"
               value={r.reason ?? ""}
@@ -411,7 +458,7 @@ export default function OptInDetailPage() {
               <div className="flex items-center justify-between py-2">
                 <span className="text-sm text-gray-500">Linked Case</span>
                 <Link
-                  href={`/cases/${r.linkedCase.id}`}
+                  href={`/cases/${r.linkedCase.caseId}`}
                   className="text-sm text-blue-600 hover:underline cursor-pointer"
                 >
                   {r.linkedCase.caseId} &mdash; {r.linkedCase.title}
