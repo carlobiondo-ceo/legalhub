@@ -80,7 +80,7 @@ export default function ActivityFeed({ activity }: ActivityFeedProps) {
             const linkHref = log.caseId
               ? `/cases/${log.caseId}`
               : log.optInRequestId
-              ? `/opt-in-requests/${log.optInRequestId}`
+              ? `/opt-in/${log.optInRequestId}`
               : null;
             const linkLabel = log.case
               ? log.case.caseId

@@ -15,11 +15,17 @@ router.get("/", async (req: Request, res: Response) => {
   try {
     const { page, limit, search, status, dateFrom, dateTo } = req.query;
 
+    const parseMulti = (v: unknown): string[] | undefined => {
+      if (!v) return undefined;
+      if (Array.isArray(v)) return v.flatMap((x) => String(x).split(",")).filter(Boolean);
+      return String(v).split(",").filter(Boolean);
+    };
+
     const result = await listOptInRequests({
       page: page ? parseInt(page as string, 10) : undefined,
       limit: limit ? parseInt(limit as string, 10) : undefined,
       search: search as string,
-      status: status ? (Array.isArray(status) ? (status as string[]) : [status as string]) : undefined,
+      status: parseMulti(status),
       dateFrom: dateFrom as string,
       dateTo: dateTo as string,
     });

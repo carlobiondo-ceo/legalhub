@@ -80,11 +80,17 @@ router.get("/me", (req, res) => {
 
 // Logout
 router.post("/logout", (req, res) => {
+  const isProd = process.env.NODE_ENV === "production";
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).json({ error: "Failed to logout" });
     }
-    res.clearCookie("connect.sid");
+    res.clearCookie("connect.sid", {
+      path: "/",
+      httpOnly: true,
+      secure: isProd,
+      sameSite: "lax",
+    });
     res.json({ success: true });
   });
 });

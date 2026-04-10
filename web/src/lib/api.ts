@@ -129,7 +129,7 @@ export const documents = {
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
-    return request<CaseDocument>("/documents", {
+    return request<CaseDocument>("/documents/upload", {
       method: "POST",
       body: formData,
     });

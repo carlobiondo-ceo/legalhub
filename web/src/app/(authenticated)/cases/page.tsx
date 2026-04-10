@@ -20,7 +20,7 @@ export default function CasesPage() {
     setError(null);
     try {
       const res = await casesApi.list(Object.keys(params).length > 0 ? params : undefined);
-      setCaseList(res.cases || []);
+      setCaseList(res.data || []);
       setTotal(res.total);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load cases");

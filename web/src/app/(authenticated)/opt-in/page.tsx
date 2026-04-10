@@ -35,7 +35,7 @@ export default function OptInListPage() {
       const res = await optInRequests.list(
         Object.keys(params).length > 0 ? params : undefined
       );
-      setRequests(res.requests || []);
+      setRequests(res.data || []);
       setTotal(res.total);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load requests");

@@ -122,12 +122,10 @@ export async function listOptInRequests(params: ListOptInParams) {
 
   return {
     data: requests,
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
   };
 }
 

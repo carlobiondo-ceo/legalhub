@@ -26,13 +26,20 @@ router.get("/", async (req: Request, res: Response) => {
       dateTo,
     } = req.query;
 
+    // Accept either repeated params (?status=a&status=b) or comma-separated (?status=a,b)
+    const parseMulti = (v: unknown): string[] | undefined => {
+      if (!v) return undefined;
+      if (Array.isArray(v)) return v.flatMap((x) => String(x).split(",")).filter(Boolean);
+      return String(v).split(",").filter(Boolean);
+    };
+
     const result = await listCases({
       page: page ? parseInt(page as string, 10) : undefined,
       limit: limit ? parseInt(limit as string, 10) : undefined,
       search: search as string,
-      status: status ? (Array.isArray(status) ? (status as string[]) : [status as string]) : undefined,
-      caseType: caseType ? (Array.isArray(caseType) ? (caseType as string[]) : [caseType as string]) : undefined,
-      riskLevel: riskLevel ? (Array.isArray(riskLevel) ? (riskLevel as string[]) : [riskLevel as string]) : undefined,
+      status: parseMulti(status),
+      caseType: parseMulti(caseType),
+      riskLevel: parseMulti(riskLevel),
       jurisdiction: jurisdiction as string,
       assignedToId: assignedToId as string,
       dateFrom: dateFrom as string,
