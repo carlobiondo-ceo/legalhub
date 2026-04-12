@@ -94,6 +94,9 @@ export async function getCase(idOrCaseId: string) {
       assignedTo: {
         select: { id: true, name: true, email: true, avatarUrl: true },
       },
+      nextActionOwner: {
+        select: { id: true, name: true, avatarUrl: true },
+      },
       documents: {
         include: {
           uploadedBy: {
@@ -171,6 +174,9 @@ export async function listCases(params: ListCasesParams) {
         assignedTo: {
           select: { id: true, name: true, avatarUrl: true },
         },
+        nextActionOwner: {
+          select: { id: true, name: true, avatarUrl: true },
+        },
       },
       orderBy: { createdAt: "desc" },
       skip,
@@ -205,6 +211,7 @@ export async function updateCase(
     "internalDeadline",
     "followUpDate",
     "dateEscalated",
+    "nextActionDeadline",
   ];
   for (const field of dateFields) {
     if (data[field] !== undefined) {

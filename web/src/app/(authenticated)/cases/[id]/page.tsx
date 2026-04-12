@@ -10,12 +10,15 @@ import {
   MessageSquare,
   Shield,
   Clock,
-  User,
+  User as UserIcon,
   Upload,
   Edit3,
   ArrowRightLeft,
+  Zap,
+  Plus,
 } from "lucide-react";
-import { cases as casesApi } from "@/lib/api";
+import { cases as casesApi, auth as authApi } from "@/lib/api";
+import type { User } from "@/lib/types";
 import type {
   LegalCase,
   CaseStatus,
@@ -81,7 +84,7 @@ function activityIcon(action: string) {
   if (lower.includes("status")) return ArrowRightLeft;
   if (lower.includes("email") || lower.includes("sent")) return MessageSquare;
   if (lower.includes("escalat") || lower.includes("lawyer")) return Shield;
-  if (lower.includes("assign") || lower.includes("user")) return User;
+  if (lower.includes("assign") || lower.includes("user")) return UserIcon;
   if (lower.includes("edit") || lower.includes("update")) return Edit3;
   return Clock;
 }
@@ -202,6 +205,8 @@ export default function CaseDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [statusOpen, setStatusOpen] = useState(false);
   const statusRef = useRef<HTMLDivElement>(null);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [showNextAction, setShowNextAction] = useState(false);
 
   const loadCase = useCallback(async () => {
     try {
@@ -217,6 +222,10 @@ export default function CaseDetailPage() {
   useEffect(() => {
     loadCase();
   }, [loadCase]);
+
+  useEffect(() => {
+    authApi.users().then(setAllUsers).catch(() => {});
+  }, []);
 
   // Close status dropdown on outside click
   useEffect(() => {
@@ -470,6 +479,57 @@ export default function CaseDetailPage() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Next Action Card */}
+      <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Zap className="w-5 h-5 text-blue-500" />
+          <h2 className="text-lg font-semibold text-gray-900">Next Action</h2>
+        </div>
+        {c.nextAction || c.nextActionOwnerId || c.nextActionDeadline || showNextAction ? (
+          <div className="space-y-3">
+            <InlineField
+              label="What"
+              value={c.nextAction ?? ""}
+              onSave={(v) => updateField("nextAction", v || null)}
+            />
+            <div className="flex items-center justify-between py-2">
+              <span className="text-sm text-gray-500">Who</span>
+              <select
+                value={c.nextActionOwnerId ?? ""}
+                onChange={(e) => updateField("nextActionOwnerId", e.target.value || null)}
+                className="text-sm text-gray-900 bg-transparent border-none focus:ring-2 focus:ring-primary rounded cursor-pointer pr-6 text-right"
+              >
+                <option value="">Not assigned</option>
+                {allUsers.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <InlineField
+              label="By when"
+              value={toDateVal(c.nextActionDeadline)}
+              type="date"
+              onSave={(v) => updateField("nextActionDeadline", v || null)}
+              badge={<DeadlineStatus deadline={c.nextActionDeadline} />}
+            />
+          </div>
+        ) : (
+          <div className="text-center py-4">
+            <p className="text-sm text-gray-400 mb-3">No next action set</p>
+            <button
+              type="button"
+              onClick={() => setShowNextAction(true)}
+              className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 font-medium cursor-pointer transition-colors duration-200"
+            >
+              <Plus className="w-4 h-4" />
+              Add next action
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Documents Section */}

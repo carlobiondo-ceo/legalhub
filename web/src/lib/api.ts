@@ -66,6 +66,8 @@ export const auth = {
   loginUrl: () => `${API_URL}/auth/google`,
 
   logout: () => request<void>("/auth/logout", { method: "POST" }),
+
+  users: () => request<User[]>("/auth/users"),
 };
 
 // ---------- Legal Cases ----------

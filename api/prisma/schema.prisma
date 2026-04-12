@@ -84,6 +84,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   assignedCases    LegalCase[]     @relation("AssignedCases")
+  nextActionCases  LegalCase[]     @relation("NextActionOwner")
   optInRequests    OptInRequest[]  @relation("RequestedBy")
   uploadedDocs     CaseDocument[]  @relation("UploadedBy")
   activityLogs     ActivityLog[]   @relation("Actor")
@@ -115,6 +116,10 @@ model LegalCase {
   followUpDate         DateTime?
   escalatedToLawyer    Boolean    @default(false)
   dateEscalated        DateTime?
+  nextAction           String?
+  nextActionDeadline   DateTime?
+  nextActionOwner      User?      @relation("NextActionOwner", fields: [nextActionOwnerId], references: [id])
+  nextActionOwnerId    String?
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
 

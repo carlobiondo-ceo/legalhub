@@ -63,6 +63,10 @@ export interface LegalCase {
   assignedTo: Pick<User, "id" | "name" | "avatarUrl"> | null;
   escalatedToLawyer: boolean;
   dateEscalated: string | null;
+  nextAction: string | null;
+  nextActionOwnerId: string | null;
+  nextActionOwner: Pick<User, "id" | "name" | "avatarUrl"> | null;
+  nextActionDeadline: string | null;
   linkedOptInRequestId: string | null;
   linkedOptInRequest?: {
     id: string;

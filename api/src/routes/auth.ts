@@ -3,6 +3,7 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { PrismaClient } from "@prisma/client";
 import { config } from "../config";
+import { requireAuth } from "../middleware/auth";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -93,6 +94,15 @@ router.post("/logout", (req, res) => {
     });
     res.json({ success: true });
   });
+});
+
+// List all users (for dropdowns)
+router.get("/users", requireAuth, async (_req, res) => {
+  const users = await prisma.user.findMany({
+    select: { id: true, name: true, email: true, role: true, avatarUrl: true },
+    orderBy: { name: "asc" },
+  });
+  res.json(users);
 });
 
 export default router;

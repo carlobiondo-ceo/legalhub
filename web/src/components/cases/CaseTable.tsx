@@ -43,6 +43,9 @@ export default function CaseTable({ cases }: CaseTableProps) {
               Deadline
             </th>
             <th className="text-left px-4 py-3 font-medium text-gray-500">
+              Next Action
+            </th>
+            <th className="text-left px-4 py-3 font-medium text-gray-500">
               Assigned To
             </th>
           </tr>
@@ -73,6 +76,18 @@ export default function CaseTable({ cases }: CaseTableProps) {
               </td>
               <td className="px-4 py-3">
                 <DeadlineStatus deadline={c.responseDeadline} />
+              </td>
+              <td className="px-4 py-3">
+                {c.nextAction ? (
+                  <div>
+                    <p className="text-gray-900 truncate max-w-[160px]">{c.nextAction}</p>
+                    {c.nextActionOwner?.name && (
+                      <p className="text-xs text-gray-400">{c.nextActionOwner.name}</p>
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-gray-400">&mdash;</span>
+                )}
               </td>
               <td className="px-4 py-3 text-gray-600">
                 {c.assignedTo?.name || <span className="text-gray-400">&mdash;</span>}
