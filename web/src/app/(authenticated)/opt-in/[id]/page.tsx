@@ -425,26 +425,6 @@ export default function OptInDetailPage() {
 
           <div className="divide-y divide-gray-100">
             <InlineField
-              label="SOI Timestamp"
-              value={
-                r.soiTimestamp
-                  ? new Date(r.soiTimestamp).toISOString().slice(0, 16)
-                  : ""
-              }
-              type="datetime-local"
-              onSave={(v) => updateField("soiTimestamp", v || null)}
-            />
-            <InlineField
-              label="DOI Timestamp"
-              value={
-                r.doiTimestamp
-                  ? new Date(r.doiTimestamp).toISOString().slice(0, 16)
-                  : ""
-              }
-              type="datetime-local"
-              onSave={(v) => updateField("doiTimestamp", v || null)}
-            />
-            <InlineField
               label="Reason"
               value={r.reason ?? ""}
               onSave={(v) => updateField("reason", v || null)}
@@ -505,7 +485,19 @@ export default function OptInDetailPage() {
             <span className="text-xs text-gray-400 ml-2">Saving...</span>
           )}
         </div>
-        <GalaxyDataForm data={r.galaxyData} onChange={handleGalaxyChange} />
+        <GalaxyDataForm
+          data={r.galaxyData}
+          onChange={handleGalaxyChange}
+          onFileUpload={async (field, file) => {
+            try {
+              const { documents: docsApi } = await import("@/lib/api");
+              await docsApi.upload(file, { optInRequestId: r.id, section: "opt_in_proof" });
+              loadRequest();
+            } catch {
+              // Silently fail — the file upload area in Documents tab is the primary path
+            }
+          }}
+        />
       </div>
 
       {/* Documents Section */}
